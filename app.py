@@ -20,37 +20,26 @@ class App(pyglet.window.Window):
         self.pole = Pole()
         self.cart = Cart()
 
-        self.freefall = True
-
-        pyglet.clock.schedule_interval(self.update, 0.025)
+        self.keys = {}
+        pyglet.clock.schedule_interval(self.update, 1 / 60.0)
 
     def update(self, dt):
-        if self.freefall:
-            self.pendulum.update(dt)
+        if self.keys.get(pyglet.window.key.LEFT, False):
+            self.cart.left()
+        
+        if self.keys.get(pyglet.window.key.RIGHT, False):
+            self.cart.right()
 
     def on_key_press(self, symbol, modifiers):
         super(App, self).on_key_press(symbol, modifiers)
-        if symbol == pyglet.window.key.SPACE:
-            self.freefall = False
+        self.keys[symbol] = True
 
     def on_key_release(self, symbol, modifiers):
-        super(App, self).on_key_press(symbol, modifiers)
-        if symbol == pyglet.window.key.SPACE:
-            self.freefall = True
-
-    def on_mouse_press(self, x, y, button, modifiers):
-        self.freefall = False
-
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        self.pendulum.reset(x, y)
-
-    def on_mouse_release(self, x, y, button, modifiers):
-        self.freefall = True
+        self.keys[symbol] = False
 
     def on_draw(self):
         self.clear()
-        self.pendulum.draw()
-
+        self.cart.draw()
 
 if __name__ == '__main__':
     window = App()

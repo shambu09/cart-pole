@@ -13,7 +13,7 @@ GRAVITY = 9.81
 FRICTION = 0.01
 
 #------------------------------------------------------------------------------
-PENDULUM_PIVOT = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 50)
+PENDULUM_PIVOT = (400, 100)
 
 #* Initial pendulum parameters:
 
@@ -28,6 +28,8 @@ PENDULUM_ANGULAR_ACCELERATION = 0
 #------------------------------------------------------------------------------
 #* Cart parameters
 CART_MASS = 1
-CART_LENGTH = 20
+CART_LENGTH = 100
 
+CART_POS = PENDULUM_PIVOT
+CART_DT = 5
 #------------------------------------------------------------------------------
