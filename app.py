@@ -19,6 +19,8 @@ class App(pyglet.window.Window):
         self.keys = {}
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
 
+        # self.frame = 0
+
     def update(self, dt):
         if self.keys.get(pyglet.window.key.LEFT, False):
             self.cartpole.left()
@@ -41,6 +43,10 @@ class App(pyglet.window.Window):
     def on_draw(self):
         self.clear()
         self.cartpole.draw()
+
+        # Download the frames.
+        # pyglet.image.get_buffer_manager().get_color_buffer().save(f"res/{self.frame}.png")
+        # self.frame += 1
 
 
 if __name__ == '__main__':
