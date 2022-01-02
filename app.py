@@ -1,10 +1,10 @@
 import pyglet
+
 from config import (
-    WINDOW_NAME,
     WINDOW_HEIGHT,
+    WINDOW_NAME,
     WINDOW_WIDTH,
 )
-
 from objects import CartPole
 
 WINDOW_CONFIG = (WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME)

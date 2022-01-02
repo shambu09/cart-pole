@@ -1,31 +1,28 @@
 import math
-from objects import (
-    Cart,
-    Pole,
-)
 
 from config import (
-    POLE_PIVOT,
-    POLE_MASS,
-    POLE_RADIUS,
-    POLE_LENGTH,
-    POLE_ANGLE,
-    POLE_ANGULAR_VELOCITY,
-    POLE_ANGULAR_ACCELERATION,
-    POLE_FRICTION,
-    CART_MASS,
+    CART_ACCELERATION,
+    CART_FRICTION,
     CART_LENGTH,
+    CART_MASS,
     CART_POS,
     CART_VELOCITY,
-    CART_ACCELERATION,
     DT,
-    GRAVITY,
     FORCE,
-    CART_FRICTION,
+    GRAVITY,
+    POLE_ANGLE,
+    POLE_ANGULAR_ACCELERATION,
+    POLE_ANGULAR_VELOCITY,
+    POLE_FRICTION,
+    POLE_LENGTH,
+    POLE_MASS,
+    POLE_PIVOT,
+    POLE_RADIUS,
     POLE_WIDTH,
 )
-
 from libs import Vector2
+
+from objects import Cart, Pole
 
 
 class CartPole:
