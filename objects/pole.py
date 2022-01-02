@@ -1,8 +1,5 @@
 import pyglet
-from pyglet import window
 from libs import Vector2
-
-from config import POLE_WIDTH
 
 
 class Pole:
