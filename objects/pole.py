@@ -1,13 +1,17 @@
 import pyglet
+from pyglet import window
 from libs import Vector2
+
+from config import POLE_WIDTH
 
 
 class Pole:
 
-    def __init__(self, pivot_pos: Vector2, bob_pos: Vector2, radius: int):
+    def __init__(self, pivot_pos: Vector2, bob_pos: Vector2, radius: int,
+                 width: int):
         self.x, self.y = pivot_pos.x, pivot_pos.y
         self.x2, self.y2 = bob_pos.x, bob_pos.y
-        self.radius = radius
+        self.radius, self.width = radius, width
         self.init()
 
     def init(self, ):
@@ -16,7 +20,8 @@ class Pole:
             y=self.y,
             x2=self.x2,
             y2=self.y2,
-            color=(255, 255, 255),
+            width=self.width,
+            color=(255, 10, 10),
         )
         self.bob = pyglet.shapes.Circle(
             x=self.x2,

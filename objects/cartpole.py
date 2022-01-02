@@ -12,14 +12,17 @@ from config import (
     POLE_ANGLE,
     POLE_ANGULAR_VELOCITY,
     POLE_ANGULAR_ACCELERATION,
+    POLE_FRICTION,
     CART_MASS,
     CART_LENGTH,
     CART_POS,
     CART_VELOCITY,
     CART_ACCELERATION,
+    DT,
     GRAVITY,
     FORCE,
-    CART_DT,
+    CART_FRICTION,
+    POLE_WIDTH,
 )
 
 from libs import Vector2
@@ -35,7 +38,8 @@ class CartPole:
         self.length = POLE_LENGTH // 2
         self.polemass_length = self.masspole * self.length
         self.force = FORCE
-        self.dt = CART_DT
+        self.dt = DT
+        self.Nc = 1
 
         self.init()
 
@@ -53,7 +57,7 @@ class CartPole:
         self.pole_radius = POLE_RADIUS
         bob_pos = Vector2((self.compute_x_y(self.pivot_pos, POLE_ANGLE,
                                             self.pole_length)))
-        self.pole = Pole(self.pivot_pos, bob_pos, POLE_RADIUS)
+        self.pole = Pole(self.pivot_pos, bob_pos, POLE_RADIUS, POLE_WIDTH)
 
         self.angle = POLE_ANGLE
         self.angle_vel = POLE_ANGULAR_VELOCITY
@@ -63,18 +67,57 @@ class CartPole:
         self.x_vel = CART_VELOCITY
         self.x_acc = CART_ACCELERATION
 
+    def compute_angle_acc(self, ):
+        sintheta = math.sin(self.angle)
+        costheta = math.cos(self.angle)
+
+        friction_1 = CART_FRICTION * costheta * self.sgn(self.x_vel * self.Nc)
+        friction_2 = CART_FRICTION * GRAVITY * self.sgn(self.x_vel * self.Nc)
+        friction_3 = (POLE_FRICTION * self.angle_vel) / (self.polemass_length)
+        friction_4 = CART_FRICTION * self.sgn(self.x_vel * self.Nc)
+
+        temp = (friction_2 - ((self.force +
+                               (self.polemass_length * (self.angle_vel**2) *
+                                (sintheta + friction_1))) / self.total_mass))
+
+        n_angle_acc = (GRAVITY * sintheta + costheta * temp - friction_3)
+
+        d_angle_acc = self.length * ((4.0 / 3.0) - ((
+            (self.masspole * costheta) / self.total_mass) *
+                                                    (costheta - friction_4)))
+
+        return n_angle_acc / d_angle_acc
+
+    def sgn(self, x):
+        if x > 0:
+            return 1
+        elif x < 0:
+            return -1
+        else:
+            return 0
+
     def update(self, dt: float):
         sintheta = math.sin(self.angle)
         costheta = math.cos(self.angle)
-        temp = (self.force + self.polemass_length * self.angle_vel**2 *
-                sintheta) / self.total_mass
 
-        self.angle_acc = (self.gravity * sintheta - costheta * temp) / (
-            self.length * (4.0 / 3.0 -
-                           (self.masspole * costheta**2 / self.total_mass)))
+        self.angle_acc = self.compute_angle_acc()
 
-        self.x_acc = temp - (self.polemass_length * self.angle_acc * costheta /
-                             self.total_mass)
+        Nc = (self.total_mass * GRAVITY) - (self.polemass_length *
+                                            ((self.angle_acc * sintheta) +
+                                             (self.angle_vel**2 * costheta)))
+
+        if self.sgn(Nc) != self.sgn(self.Nc):
+            self.angle_acc = self.compute_angle_acc()
+
+        self.Nc = Nc
+        friction_5 = CART_FRICTION * self.Nc * self.sgn(self.x_vel * self.Nc)
+
+        n_x_acc = self.force + (self.polemass_length *
+                                ((self.angle_vel**2 * sintheta) -
+                                 (self.angle_acc * costheta))) - friction_5
+        d_x_acc = self.total_mass
+
+        self.x_acc = n_x_acc / d_x_acc
 
         self.x_vel = self.x_vel + self.x_acc * self.dt
         self.x = self.x + self.x_vel * self.dt
