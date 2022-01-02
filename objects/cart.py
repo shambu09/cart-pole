@@ -1,21 +1,12 @@
 import pyglet
-
-from config import (
-    CART_POS,
-    CART_LENGTH,
-    CART_MASS,
-    CART_DT,
-    FRICTION,
-    GRAVITY,
-)
+from libs import Vector2
 
 
 class Cart:
 
-    def __init__(self):
-        self.x, self.y = CART_POS
-        self.length = CART_LENGTH
-        self.mass = CART_MASS
+    def __init__(self, cart_pos: Vector2, cart_length: float):
+        self.x, self.y = cart_pos.x, cart_pos.y
+        self.length = cart_length
         self.init()
 
     def init(self, ):
@@ -28,11 +19,9 @@ class Cart:
         )
         self.cart.anchor_position = (self.length // 2, self.length // 2)
 
-    def left(self, ):
-        self.cart.x -= CART_DT
-
-    def right(self, ):
-        self.cart.x += CART_DT
+    def update(self, cart_pos: Vector2):
+        self.x, self.y = cart_pos.x, cart_pos.y
+        self.cart.x, self.cart.y = self.x, self.y
 
     def draw(self, ):
         self.cart.draw()

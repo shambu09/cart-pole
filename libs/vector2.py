@@ -1,4 +1,5 @@
 import math
+from typing import Iterable
 
 
 class Vector2:
@@ -17,9 +18,19 @@ class Vector2:
         dot(Vector2 : other) -> float : returns the dot product of the vector
     """
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y=None):
+        if y is None:
+            if isinstance(x, Vector2):
+                self.x = x.x
+                self.y = x.y
+            elif isinstance(x, Iterable):
+                self.x = x[0]
+                self.y = x[1]
+            else:
+                raise TypeError("Vector2() takes 1 or 2 arguments")
+        else:
+            self.x = x
+            self.y = y
         self.mag = self.magnitude()
 
     def changeofbases(self, other1, other2):

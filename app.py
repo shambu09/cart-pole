@@ -5,10 +5,7 @@ from config import (
     WINDOW_WIDTH,
 )
 
-from objects import (
-    Pole,
-    Cart,
-)
+from objects import CartPole
 
 WINDOW_CONFIG = (WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME)
 
@@ -17,18 +14,22 @@ class App(pyglet.window.Window):
 
     def __init__(self):
         super(App, self).__init__(*WINDOW_CONFIG)
-        self.pole = Pole()
-        self.cart = Cart()
+        self.cartpole = CartPole()
 
         self.keys = {}
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
 
     def update(self, dt):
         if self.keys.get(pyglet.window.key.LEFT, False):
-            self.cart.left()
-        
-        if self.keys.get(pyglet.window.key.RIGHT, False):
-            self.cart.right()
+            self.cartpole.left()
+
+        elif self.keys.get(pyglet.window.key.RIGHT, False):
+            self.cartpole.right()
+
+        else:
+            self.cartpole.force = 0
+
+        self.cartpole.update(dt)
 
     def on_key_press(self, symbol, modifiers):
         super(App, self).on_key_press(symbol, modifiers)
@@ -39,7 +40,8 @@ class App(pyglet.window.Window):
 
     def on_draw(self):
         self.clear()
-        self.cart.draw()
+        self.cartpole.draw()
+
 
 if __name__ == '__main__':
     window = App()
