@@ -2,7 +2,7 @@
 Modelling the cart pole (Inverted Pendulum) dynamic system using python.
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/shambu09/cart-pole/main/res/output.gif" alt="Image"/>
+    <img src="https://raw.githubusercontent.com/shambu09/cart-pole/main/res/output.gif" alt="cart pole visualization"/>
 </p>
 
 
